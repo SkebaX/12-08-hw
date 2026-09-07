@@ -32,10 +32,20 @@ pg_restore -d <имя_базы> <файл_сохранения>
 
 3.1. С помощью официальной документации приведите пример команды инкрементного резервного копирования базы данных MySQL.
 
+### Ответ:
+В MySQL нет отдельной команды для инкрементного бэкапа — он строится на бинарных логах.
+1.Необходимо включить бинарное логирование:
 ```
-    - mysqlbackup --incremental=optimistic \
-        --incremental-base=history:last_backup \
-        --backup-dir=/path/to/incremental_backup \
-        --backup-image=incremental_image.bi \
-        backup-to-image
+log_bin = /path/to/mysql-bin.log
 ```
+2.Сделать полный бэкап
+```
+mysqldump --single-transaction --flush-logs --master-data=2 --all-databases > full_backup.sql
+```
+3.Скопировать новые бинарные логи (инкрементное резервное копирование).
+
+4. Восстановление при помощи mysqlbinlog:
+```
+mysqlbinlog /path/to/mysql-bin.000002 | mysql -u root -p
+```
+
