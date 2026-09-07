@@ -42,7 +42,9 @@ log_bin = /path/to/mysql-bin.log
 ```
 mysqldump --single-transaction --flush-logs --master-data=2 --all-databases > full_backup.sql
 ```
+
 3.Скопировать новые бинарные логи (инкрементное резервное копирование).
+
 
 4. Восстановление при помощи mysqlbinlog:
 ```
