@@ -34,11 +34,14 @@ pg_restore -d <имя_базы> <файл_сохранения>
 
 ### Ответ:
 В MySQL нет отдельной команды для инкрементного бэкапа — он строится на бинарных логах.
+
 1.Необходимо включить бинарное логирование:
+
 ```
 log_bin = /path/to/mysql-bin.log
 ```
 2.Сделать полный бэкап
+
 ```
 mysqldump --single-transaction --flush-logs --master-data=2 --all-databases > full_backup.sql
 ```
@@ -47,6 +50,7 @@ mysqldump --single-transaction --flush-logs --master-data=2 --all-databases > fu
 
 
 4. Восстановление при помощи mysqlbinlog:
+
 ```
 mysqlbinlog /path/to/mysql-bin.000002 | mysql -u root -p
 ```
